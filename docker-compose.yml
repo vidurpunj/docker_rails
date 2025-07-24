@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: bundle exec rails s -b 0.0.0.0
+    volumes:
+      - .:/app
+    ports:
+      - "4001:3000"
+    environment:
+      SECRET_KEY_BASE: "3ce8958de520aa9f693a24d00870838a184f9098f2b8e48ade5e37b3c818a7093e24848e09141461801e0d13c3c07416d8bf2273c16ca86b025ad0a5ca01fd06"
+      RAILS_LOG_TO_STDOUT: "true"
+      DB_PRIMARY_NAME: docker_rails_production
+      DB_CACHE_NAME: docker_rails_production_cache
+      DB_QUEUE_NAME: docker_rails_production_queue
+      DB_CABLE_NAME: docker_rails_production_cable
+      DB_USERNAME: vidur
+      DB_PASSWORD: Vidur@1234
+      DB_HOST: host.docker.internal
+      DB_PORT: 3306
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
