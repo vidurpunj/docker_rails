@@ -1,13 +1,24 @@
 version: '3.8'
 
 services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - web
   web:
     build: .
+    image: vidurpunj/dockerrails:1.1
     command: bundle exec rails s -b 0.0.0.0
     volumes:
       - .:/app
     ports:
       - "4001:3000"
+    depends_on:
+      - redis
     environment:
       SECRET_KEY_BASE: "3ce8958de520aa9f693a24d00870838a184f9098f2b8e48ade5e37b3c818a7093e24848e09141461801e0d13c3c07416d8bf2273c16ca86b025ad0a5ca01fd06"
       RAILS_LOG_TO_STDOUT: "true"
@@ -19,5 +30,9 @@ services:
       DB_PASSWORD: Vidur@1234
       DB_HOST: host.docker.internal
       DB_PORT: 3306
+      RAILS_ENV: production
+      REDIS_URL: redis://redis:6379/1
     extra_hosts:
       - "host.docker.internal:host-gateway"
+  redis:
+    image: redis:7
